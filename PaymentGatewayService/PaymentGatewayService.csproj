@@ -24,7 +24,6 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DatabaseWrapper">
-      <HintPath>..\DatabaseWrapper\bin\Debug\DatabaseWrapper.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
