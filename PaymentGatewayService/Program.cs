@@ -44,11 +44,11 @@ try
 
     var app = builder.Build();
 
-    //if (!app.Environment.IsDevelopment())
-    //{
-    //    app.UseExceptionHandler("/Payment/Error");
-    //    app.UseHsts();
-    //}
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Payment/Error");
+        app.UseHsts();
+    }
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();

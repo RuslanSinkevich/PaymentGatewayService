@@ -57,7 +57,6 @@ namespace PaymentGatewayService.Controllers
             await _paymentService.CreateAsync(paymentVm.PaymentBanks!);
         }
 
-        [Route("/Error")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

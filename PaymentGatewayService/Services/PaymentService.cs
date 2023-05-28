@@ -60,33 +60,30 @@ namespace PaymentGatewayService.Services
             try
             {
                 var getBank = await _paymentRepository.ReadAsync(paymentVm.Bank);
-                var сalculateTotal = _bankTotalCalculator.CalculateTotal(paymentVm.Bank, paymentVm.Total);
                 bool isBankEnumValid = Enum.IsDefined(typeof(BankEnum.Bank), paymentVm.Bank);
 
                 // проверяем есть ли банк в BankEnum  
                 if (isBankEnumValid)
                 {
+                    var сalculateTotal = _bankTotalCalculator.CalculateTotal(paymentVm.Bank, paymentVm.Total);
                     //  проверяем есть ли банк в BD 
                     if (getBank == null)
                     {
+
                         paymentVm.Total += сalculateTotal;
                         paymentVm.Id = Guid.NewGuid();
                         await _paymentRepository.CreateAsync(paymentVm);
                         return paymentVm;
                     }
-                }
-                else
-                {
-                    return getBank;
-                }
+                    else if(ValidationModels.Valid(paymentVm, "Id"))
+                    {
+                        // Применяем стратегии
+                        getBank.Total += сalculateTotal;
+                        await _paymentRepository.UpdateAsync(getBank);
+                        return getBank;
+                    }
 
-                if (ValidationModels.Valid(paymentVm, "Id"))
-                {
-                    // Применяем стратегии
-                    getBank.Total += сalculateTotal;
-                    await _paymentRepository.UpdateAsync(getBank);
                 }
-
                 return getBank;
             }
             catch (Exception ex)
