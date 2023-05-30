@@ -21,10 +21,9 @@
                     <span asp-validation-for="PaymentBanks!.Bank" class="text-danger"></span>
                 </div>
             </div>
-           @* <input type="submit" value="Отправить" onclick="validateInput()" class="btn btn-primary" />*@
-        </form>
-        <input type="submit" id="submitBtn" value="Отправить"  class="btn btn-primary" />
+            <input type="submit" id="submitBtn" value="Отправить" class="btn btn-primary" />
 
+           </form>
     </div>
     
 </div>
@@ -35,48 +34,5 @@
         <partial name="_ValidationScriptsPartial"/>
     }
 
-    <script>
-        $(document).ready(function () {
-            $("#paymentForm").validate(); // Инициализация валидации формы
-
-            $("#submitBtn").click(function (event) {
-                event.preventDefault(); // Отменяем стандартное действие кнопки submit
-
-                var currency = $('input[name="PaymentBanks.Total"]').val();
-                var bank = $('select[name="PaymentBanks.Bank"]').val();
-
-                // Формируем объект данных для отправки
-                var data = {
-                    SelectedBank: null,
-                    PaymentBanks: {
-                        Total: currency,
-                        Bank: bank,
-                    },
-                };
-               
-                // Проверка валидации формы
-                if (!$("#paymentForm").valid()) {
-                    // Отображение сообщений об ошибках
-                    $("#paymentForm").validate().showErrors();
-                    return;
-                }
-
-                $.ajax({
-                    url: "/Payment/Create",
-                    type: "POST",
-                    data: JSON.stringify(data),
-                    contentType: "application/json",
-                    success: function () {
-                        // Обработка успешного выполнения запроса
-                        alert("Данные успешно отправлены.");
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        // Обработка ошибки
-                        alert("Произошла ошибка при отправке данных: " + errorThrown);
-                    },
-                });
-            });
-        });
-    </script>
-
+    <script src="~/js/payment.js" type="module"></script>
 }

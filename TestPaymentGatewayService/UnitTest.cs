@@ -97,39 +97,63 @@ namespace TestPaymentGatewayService
             Assert.Equal(paymentVm, result);
         }
 
-        [Fact]
-        public void Bank_Total_Calculator()
+        [Theory]
+        [InlineData(10, 30)]
+        [InlineData(160, 480)]
+        [InlineData(300, 900)]
+        [InlineData(0, 0)]
+        public void Bank_Total_Calculator(int payments, int result)
         {
-            var calculator = _bankTotalCalculator.CalculateTotal(0, 100);
-            Assert.Equal(300, calculator);
+            var calculator = _bankTotalCalculator.CalculateTotal(0, payments);
+            Assert.Equal( result, calculator);
         }
 
-        [Fact]
-        public void First_Bank_Strategy()
+        [Theory]
+        [InlineData(10, 30)]
+        [InlineData(160, 480)]
+        [InlineData(300, 900)]
+        [InlineData(10000, 30000)]
+        [InlineData(0, 0)]
+        public void First_Bank_Strategy(int payments, int result)
         {
-            decimal firstBankResult = _firstBankStrategy.CalculatePayment(100);
-            Assert.Equal(300, firstBankResult);
+            var firstBankResult = _firstBankStrategy.CalculatePayment(payments);
+            Assert.Equal(result, firstBankResult);
         }
 
-        [Fact]
-        public void Second_Bank_Strategy()
+        [Theory]
+        [InlineData(10, 5)]
+        [InlineData(160, 80)]
+        [InlineData(300, 150)]
+        [InlineData(10000, 5000)]
+        [InlineData(0, 0)]
+        public void Second_Bank_Strategy(int payments, int result)
         {
-            decimal secondBankResult = _secondBankStrategy.CalculatePayment(100);
-            Assert.Equal(50, secondBankResult);
+            decimal secondBankResult = _secondBankStrategy.CalculatePayment(payments);
+            Assert.Equal(result, secondBankResult);
         }
 
-        [Fact]
-        public void Third_Bank_Strategy()
+        [Theory]
+        [InlineData(10, 0)]
+        [InlineData(160, 140)]
+        [InlineData(300, 350)]
+        [InlineData(10000, 14900)]
+        [InlineData(0, 0)]
+        public void Third_Bank_Strategy(int payments, int result)
         {
-            decimal thirdBankResult = _thirdBankStrategy.CalculatePayment(100);
-            Assert.Equal(50, thirdBankResult);
+            decimal thirdBankResult = _thirdBankStrategy.CalculatePayment(payments);
+            Assert.Equal(result, thirdBankResult);
         }
 
-        [Fact]
-        public void Default_Strategy()
+        [Theory]
+        [InlineData(10, 10)]
+        [InlineData(160, 160)]
+        [InlineData(300, 300)]
+        [InlineData(10000, 10000)]
+        [InlineData(0, 0)]
+        public void Default_Strategy(int payments, int result)
         {
-            decimal defaultStrategy = _defaultStrategy.CalculatePayment(100);
-            Assert.Equal(100, defaultStrategy);
+            decimal defaultStrategy = _defaultStrategy.CalculatePayment(payments);
+            Assert.Equal(result, defaultStrategy);
 
         }
 
