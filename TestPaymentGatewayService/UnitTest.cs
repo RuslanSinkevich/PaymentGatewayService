@@ -46,6 +46,16 @@ namespace TestPaymentGatewayService
                 _wrapperRepository.Object);
         }
 
+        public static IEnumerable<object[]> BankTotalData =>
+            new List<object[]>
+            {
+                new object[] { 10, 30 },
+                new object[] { 160, 480 },
+                new object[] { 300, 900 },
+                new object[] {10000, 30000 },
+                new object[] { 0, 0 },
+            };
+
         [Fact]
         public Task GetAllBanksAsync_Valid_Models()
         {
@@ -98,22 +108,15 @@ namespace TestPaymentGatewayService
         }
 
         [Theory]
-        [InlineData(10, 30)]
-        [InlineData(160, 480)]
-        [InlineData(300, 900)]
-        [InlineData(0, 0)]
+        [MemberData(nameof(BankTotalData))]
         public void Bank_Total_Calculator(int payments, int result)
         {
             var calculator = _bankTotalCalculator.CalculateTotal(0, payments);
-            Assert.Equal( result, calculator);
+            Assert.Equal(result, calculator);
         }
 
         [Theory]
-        [InlineData(10, 30)]
-        [InlineData(160, 480)]
-        [InlineData(300, 900)]
-        [InlineData(10000, 30000)]
-        [InlineData(0, 0)]
+        [MemberData(nameof(BankTotalData))]
         public void First_Bank_Strategy(int payments, int result)
         {
             var firstBankResult = _firstBankStrategy.CalculatePayment(payments);
